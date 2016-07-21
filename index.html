@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en"  ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>大连经分图表生成系统</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+
+    <!-- Toastr style -->
+    <link href="css/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <!-- colorpicker style -->
+    <link href="js/colorpicker/css/colorpicker.css" rel="stylesheet">
+
+    <!-- sweetalert style -->
+    <link href="js/sweetalert/sweetalert.css" rel="stylesheet">
+
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/common.css" rel="stylesheet">
+    <link href="css/pageStyle.css" rel="stylesheet">
+</head>
+<body  ng-controller="echartDemo">
+
+<header class="echartDemo-header">
+    <h1 class="fl">大连经分图表生成系统</h1>
+    <span class="fr">大唐融合通信技术无锡有限公司</span>
+</header>
+
+<section class="echartDemo-main">
+    <header class="echartDemo-title">
+        图表编辑
+    </header>
+    <div class="row echartDemo-container">
+        <div class="col-md-6 echartDemo-c echartDemo-br">
+            <div class="echartDemo-chart" id="echartDemo-chart"></div>
+            <div class="echartDemo-button">
+                <button type="button" class="btn btn-w-m btn-primary" data-toggle="modal" data-target="#myModal">查看JSON</button>
+            </div>
+        </div>
+        <div class="col-md-6 echartDemo-c">
+            <div class="echartDemo-r-title">
+                图表属性
+            </div>
+            <div class="echartDemo-r-con">
+                <div class="tabs-container mt20">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#tab-1"> 基础</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-2"> 标题</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-3">图例</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-4">提示框</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-5">图表</a></li>
+                    </ul>
+                    <form method="get" class="form-horizontal">
+                        <div class="tab-content">
+                            <div id="tab-1" class="tab-pane active">
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">图表类型:</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-control" name="account" ng-change="typeChanged(typeVal)" ng-model="typeVal" ng-init="bar">
+                                                <option value="bar" selected>柱状图</option>
+                                                <option value="line">线图</option>
+                                                <option value="lineArea">面积图</option>
+                                                <option value="pie">饼图</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">背景颜色:</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" placeholder="颜色"
+                                                   class="form-control" ng-model="chartConfig.backgroundColor">
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <!--<div class="form-group">
+                                        <label class="col-sm-3 control-label">颜色数组:</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" placeholder="颜色"
+                                                   class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>-->
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">作为图片渲染:</label>
+                                        <div class="col-sm-9">
+                                            <div class="checkbox checkbox-primary">
+                                                <input id="checkbox1" type="checkbox"  ng-model="chartConfig.renderAsImage">
+                                                <label for="checkbox1">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">启用拖拽重计算:</label>
+                                        <div class="col-sm-9">
+                                            <div class="checkbox checkbox-primary">
+                                                <input id="checkbox2" type="checkbox"  ng-model="chartConfig.calculable">
+                                                <label for="checkbox2">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <!--<div class="form-group">
+                                        <label class="col-sm-3 control-label">启用图表初始化动画:</label>
+                                        <div class="col-sm-9">
+                                            <div class="checkbox checkbox-primary">
+                                                <input id="checkbox3" type="checkbox" checked>
+                                                <label for="checkbox3">
+                                                    (PS:建议IE8-关闭)
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>-->
+
+                                </div>
+                            </div>
+                            <div id="tab-2" class="tab-pane ">
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">是否显示:</label>
+                                        <div class="col-sm-9">
+                                            <div class="checkbox checkbox-primary">
+                                                <input id="titleshow" type="checkbox" checked ng-model="chartConfig.title.show" ng-init="chartConfig.title.show=true">
+                                                <label for="titleshow">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">主标题文本:</label>
+                                        <div class="col-sm-9"><input type="text" placeholder="请填写主标题文本" class="form-control" ng-model="chartConfig.title.text"></div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">主标题文本超链接:</label>
+                                        <div class="col-sm-9"><input type="text" placeholder="URL" class="form-control" ng-model="chartConfig.title.link"></div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">副标题文本:</label>
+                                        <div class="col-sm-9"><input type="text"  placeholder="请填写副主标题文本" class="form-control" ng-model="chartConfig.title.subtext"></div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">副标题文本超链接:</label>
+                                        <div class="col-sm-9"><input type="text" placeholder="URL" class="form-control" ng-model="chartConfig.title.sublink"></div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">距离左边距:</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" placeholder="可选为：'center' | 'left' | 'right' | {number}（x坐标，单位px）" class="form-control"
+                                                   ng-model="chartConfig.title.x" ng-init="chartConfig.title.x='center'">
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">距离上边距:</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" placeholder="可选为：'top' | 'bottom' | 'center' | {number}（y坐标，单位px）" class="form-control"
+                                                   ng-model="chartConfig.title.y"  >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">文本对齐方式:</label>
+                                        <div class="col-sm-9"><input type="text" placeholder="可选为： left' | 'right' | 'center" class="form-control" ng-model="chartConfig.title.textAlign"></div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">标题背景颜色:</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" placeholder="颜色"
+                                                   class="form-control" ng-model="chartConfig.title.backgroundColor">
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">标题内边距:</label>
+                                        <div class="col-sm-9"><input type="text" placeholder="单位px" class="form-control" ng-model="chartConfig.title.padding"></div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">主副标题纵向间隔:</label>
+                                        <div class="col-sm-9"><input type="text" placeholder="单位px" class="form-control" ng-model="chartConfig.title.itemGap"></div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading" role="tab" id="headingOne">
+                                                <h4 class="panel-title" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                                    <a role="button" >
+                                                        主标题文本样式
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                                                <div class="panel-body pln pr20 pb10">
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">字体</label>
+                                                        <div class="col-sm-9">
+                                                            <select class="form-control" name="account" ng-model="chartConfig.title.textStyle.fontFamily">
+                                                                <option value="SimSun">宋体</option>
+                                                                <option value="SimHei">黑体</option>
+                                                                <option value="Microsoft YaHei">微软雅黑</option>
+                                                                <option value="KaiTi">楷体</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed mt10 mb10 ml20"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">字体大小</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" placeholder="填写数字，（单位px）" class="form-control" ng-model="chartConfig.title.textStyle.fontSize">
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed mt10 mb10 ml20"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">字体样式</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text"
+                                                                   placeholder="可选为：'normal' | 'italic' | 'oblique'" class="form-control"
+                                                                   ng-model="chartConfig.title.textStyle.fontStyle">
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed mt10 mb10 ml20"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">字体加粗</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text"
+                                                                   placeholder="可选为：'normal' | 'bold' | 'bolder' | 'lighter' | 100 | 200 |... | 900" class="form-control"
+                                                                   ng-model="chartConfig.title.textStyle.fontWeight">
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed mt10 mb10 ml20"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel-group" id="accordion2" role="tablist" aria-multiselectable="true">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading" role="tab" id="headingTwo">
+                                                <h4 class="panel-title" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                                    <a role="button" >
+                                                        副标题文本样式
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                                <div class="panel-body pln pr20 pb10">
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">字体</label>
+                                                        <div class="col-sm-9">
+                                                            <select class="form-control" name="account" ng-model="chartConfig.title.subtextStyle.fontFamily">
+                                                                <option value="SimSun">宋体</option>
+                                                                <option value="SimHei">黑体</option>
+                                                                <option value="Microsoft YaHei">微软雅黑</option>
+                                                                <option value="KaiTi">楷体</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed mt10 mb10 ml20"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">字体大小</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" placeholder="填写数字，（单位px）" class="form-control" ng-model="chartConfig.title.subtextStyle.fontSize">
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed mt10 mb10 ml20"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">字体样式</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text"
+                                                                   placeholder="可选为：'normal' | 'italic' | 'oblique'" class="form-control"
+                                                                   ng-model="chartConfig.title.subtextStyle.fontStyle">
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed mt10 mb10 ml20"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">字体加粗</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text"
+                                                                   placeholder="可选为：'normal' | 'bold' | 'bolder' | 'lighter' | 100 | 200 |... | 900" class="form-control"
+                                                                   ng-model="chartConfig.title.subtextStyle.fontWeight">
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed mt10 mb10 ml20"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div id="tab-3" class="tab-pane ">
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">是否显示:</label>
+                                        <div class="col-sm-9">
+                                            <div class="checkbox checkbox-primary">
+                                                <input id="Legendshow" type="checkbox" checked ng-model="chartConfig.legend.show" ng-init="chartConfig.legend.show=true">
+                                                <label for="Legendshow">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">布局方式:</label>
+                                        <div class="col-sm-9"><input type="text" placeholder="可选为：'horizontal' | 'vertical'" class="form-control" ng-model="chartConfig.legend.orient"></div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">水平位置:</label>
+                                        <div class="col-sm-9"><input type="text" placeholder="可选为：'center' | 'left' | 'right' | {number}（x坐标，单位px）"
+                                                                     class="form-control" ng-model="chartConfig.legend.x"></div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">垂直位置:</label>
+                                        <div class="col-sm-9"><input type="text" placeholder="可选为：'top' | 'bottom' | 'center' | {number}（y坐标，单位px）"
+                                                                     class="form-control" ng-model="chartConfig.legend.y" ng-init="chartConfig.legend.y='bottom'"></div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">背景颜色:</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" placeholder="颜色"
+                                                   class="form-control" ng-model="chartConfig.legend.backgroundColor">
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">图例内边距:</label>
+                                        <div class="col-sm-9"><input type="text" placeholder="单位px" class="form-control" ng-model="chartConfig.legend.padding"></div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">间隔:</label>
+                                        <div class="col-sm-9"><input type="text" placeholder="横向布局时为水平间隔，纵向布局时为纵向间隔（单位px）"
+                                                                     class="form-control" ng-model="chartConfig.legend.itemGap"></div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">图例图形宽度:</label>
+                                        <div class="col-sm-9"><input type="text" placeholder="图例图形宽度"
+                                                                     class="form-control" ng-model="chartConfig.legend.itemWidth"></div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">图例图形高度:</label>
+                                        <div class="col-sm-9"><input type="text" placeholder="图例图形高度"
+                                                                     class="form-control" ng-model="chartConfig.legend.itemHeight"></div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">文本格式器:</label>
+                                        <div class="col-sm-9"><input type="text" placeholder="文本格式器：{string}（Template） | {Function}，模板变量为'{name}'"
+                                                                     class="form-control" ng-model="chartConfig.legend.formatter"></div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">选择模式:</label>
+                                        <div class="col-sm-9">
+                                            <div class="checkbox checkbox-primary">
+                                                <input id="legend-selectedMode" type="checkbox" checked ng-model="chartConfig.legend.selectedMode" ng-init="chartConfig.legend.selectedMode=true">
+                                                <label for="legend-selectedMode">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel-group" id="accordion3" role="tablist" aria-multiselectable="true">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading" role="tab" id="headingThree">
+                                                <h4 class="panel-title" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                    <a role="button" >
+                                                        图例文本样式
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                                <div class="panel-body pln pr20 pb10">
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">字体</label>
+                                                        <div class="col-sm-9">
+                                                            <select class="form-control" name="account" ng-model="chartConfig.legend.textStyle.fontFamily">
+                                                                <option value="SimSun">宋体</option>
+                                                                <option value="SimHei">黑体</option>
+                                                                <option value="Microsoft YaHei">微软雅黑</option>
+                                                                <option value="KaiTi">楷体</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed mt10 mb10 ml20"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">字体大小</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" placeholder="填写数字，（单位px）" class="form-control" ng-model="chartConfig.legend.textStyle.fontSize">
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed mt10 mb10 ml20"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">字体样式</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text"
+                                                                   placeholder="可选为：'normal' | 'italic' | 'oblique'" class="form-control"
+                                                                   ng-model="chartConfig.legend.textStyle.fontStyle">
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed mt10 mb10 ml20"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">字体加粗</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text"
+                                                                   placeholder="可选为：'normal' | 'bold' | 'bolder' | 'lighter' | 100 | 200 |... | 900" class="form-control"
+                                                                   ng-model="chartConfig.legend.textStyle.fontWeight">
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed mt10 mb10 ml20"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div id="tab-4" class="tab-pane ">
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">是否显示:</label>
+                                        <div class="col-sm-9">
+                                            <div class="checkbox checkbox-primary">
+                                                <input id="tooltipsshow" type="checkbox" checked ng-model="chartConfig.tooltip.show" ng-init="chartConfig.tooltip.show=true">
+                                                <label for="tooltipsshow">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">触发类型:</label>
+                                        <div class="col-sm-9"><input type="text" placeholder="可选为：'item' | 'axis'" class="form-control" ng-model="chartConfig.tooltip.trigger"></div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">显示延迟:</label>
+                                        <div class="col-sm-9"><input type="text" placeholder="单位ms" class="form-control" ng-model="chartConfig.tooltip.showDelay"></div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">隐藏延迟:</label>
+                                        <div class="col-sm-9"><input type="text" placeholder="单位ms" class="form-control" ng-model="chartConfig.tooltip.hideDelay"></div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">动画变换时长:</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" placeholder="单位s，如果你希望tooltip的跟随实时响应，showDelay设置为0是关键"
+                                                                     class="form-control" ng-model="chartConfig.tooltip.hideDelay">
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">鼠标是否可进入详情气泡:</label>
+                                        <div class="col-sm-9">
+                                            <div class="checkbox checkbox-primary">
+                                                <input id="mousein" type="checkbox" ng-model="chartConfig.tooltip.enterable" >
+                                                <label for="mousein">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">背景颜色:</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" placeholder="颜色"
+                                                   class="form-control" ng-model="chartConfig.tooltip.backgroundColor">
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">边框颜色:</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" placeholder="颜色"
+                                                   class="form-control" ng-model="chartConfig.tooltip.borderColor">
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">边框圆角:</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" placeholder="单位px"
+                                                   class="form-control" ng-model="chartConfig.tooltip.borderRadius">
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">边框线宽:</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" placeholder="单位px"
+                                                   class="form-control" ng-model="chartConfig.tooltip.borderWidth">
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">内边距:</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" placeholder="单位px"
+                                                   class="form-control" ng-model="chartConfig.tooltip.padding">
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+
+                                    <div class="panel-group" id="accordion4" role="tablist" aria-multiselectable="true">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading" role="tab" id="headingFour">
+                                                <h4 class="panel-title" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                                    <a role="button" >
+                                                        提示框文本样式
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+                                                <div class="panel-body pln pr20 pb10">
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">字体颜色:</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" placeholder="颜色"
+                                                                   class="form-control" ng-model="chartConfig.tooltip.textStyle.color">
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">字体修饰</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" placeholder="仅对提示框生效" class="form-control" ng-model="chartConfig.tooltip.textStyle.decoration">
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed mt10 mb10 ml20"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">水平对齐方式</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" placeholder="可选为：'left' | 'right' | 'center'" class="form-control"
+                                                                   ng-model="chartConfig.tooltip.textStyle.align">
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed mt10 mb10 ml20"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">垂直对齐方式</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" placeholder="可选为：'top' | 'bottom' | 'middle'" class="form-control"
+                                                                   ng-model="chartConfig.tooltip.textStyle.baseline">
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed mt10 mb10 ml20"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">字体</label>
+                                                        <div class="col-sm-9">
+                                                            <select class="form-control" name="account" ng-model="chartConfig.tooltip.textStyle.fontFamily">
+                                                                <option value="SimSun">宋体</option>
+                                                                <option value="SimHei">黑体</option>
+                                                                <option value="Microsoft YaHei">微软雅黑</option>
+                                                                <option value="KaiTi">楷体</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed mt10 mb10 ml20"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">字体大小</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" placeholder="填写数字，（单位px）" class="form-control" ng-model="chartConfig.tooltip.textStyle.fontSize">
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed mt10 mb10 ml20"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">字体样式</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text"
+                                                                   placeholder="可选为：'normal' | 'italic' | 'oblique'" class="form-control"
+                                                                   ng-model="chartConfig.tooltip.textStyle.fontStyle">
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed mt10 mb10 ml20"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">字体加粗</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text"
+                                                                   placeholder="可选为：'normal' | 'bold' | 'bolder' | 'lighter' | 100 | 200 |... | 900" class="form-control"
+                                                                   ng-model="chartConfig.tooltip.textStyle.fontWeight">
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed mt10 mb10 ml20"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <div id="tab-5" class="tab-pane ">
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">直角坐标系内绘图网格左上角横坐标:</label>
+                                        <div class="col-sm-9"><input type="text" placeholder="单位px,支持百分比（字符串），如'50%'(显示区域横向中心)" class="form-control"
+                                                                     ng-model="chartConfig.grid.x"></div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">直角坐标系内绘图网格左上角纵坐标:</label>
+                                        <div class="col-sm-9"><input type="text" placeholder="单位px,支持百分比（字符串），如'50%'(显示区域横向中心)" class="form-control"
+                                                                     ng-model="chartConfig.grid.y"></div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">直角坐标系内绘图网格右下角横坐标:</label>
+                                        <div class="col-sm-9"><input type="text" placeholder="单位px,支持百分比（字符串），如'50%'(显示区域横向中心)" class="form-control"
+                                                                     ng-model="chartConfig.grid.x2"></div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">直角坐标系内绘图网格右下角纵坐标:</label>
+                                        <div class="col-sm-9"><input type="text" placeholder="单位px,支持百分比（字符串），如'50%'(显示区域横向中心)" class="form-control"
+                                                                     ng-model="chartConfig.grid.y2"></div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">绘图网格（不含坐标轴）宽度:</label>
+                                        <div class="col-sm-9"><input type="text" placeholder="支持百分比（字符串），如'50%'(显示区域一半的宽度)" class="form-control"
+                                                                     ng-model="chartConfig.grid.width"></div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">绘图网格（不含坐标轴）高度:</label>
+                                        <div class="col-sm-9"><input type="text" placeholder="支持百分比（字符串），如'50%'(显示区域一半的宽度)" class="form-control"
+                                                                     ng-model="chartConfig.grid.height"></div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">绘图网格背景颜色:</label>
+                                        <div class="col-sm-9"><input type="text" placeholder="颜色" class="form-control"
+                                                                     ng-model="chartConfig.grid.backgroundColor"></div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">绘图网格边框线宽:</label>
+                                        <div class="col-sm-9"><input type="text" placeholder="数字" class="form-control"
+                                                                     ng-model="chartConfig.grid.borderWidth"></div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">绘图网格边框颜色:</label>
+                                        <div class="col-sm-9"><input type="text" placeholder="颜色" class="form-control"
+                                                                     ng-model="chartConfig.grid.borderColor"></div>
+                                    </div>
+                                    <div class="hr-line-dashed mt10 mb10"></div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<div class="modal inmodal fade" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog mnw1200">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">查看JSON</h4>
+            </div>
+            <div class="modal-body">
+                <div method="get" class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">格式化JSON:</label>
+                        <div class="col-sm-4">
+                            <div class="checkbox checkbox-primary">
+                                <input id="prettyJson" type="checkbox"   ng-model="prettyJSON" >
+                                <label for="prettyJson">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4" >
+                            <div class="copyJson_con" id="copyJson_con">
+                                <button type="button" class="btn btn-w-m btn-primary" id="copyJson">复制到剪切板</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="echartTest-json">
+                    <pre ng-show="prettyJSON" id="copyText">{{ chartConfig | json }}</pre>
+                    <pre ng-show="!prettyJSON">{{ chartConfig }}</pre>
+                </div>
+                <div class="echartTest-json2">
+                    <h1>粘贴JSON：</h1>
+                    <textarea name="pasteJson" ng-model="chartConfigPaste"  id="" ></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<footer class="echartDemo-footer">V0.2 &copy; 大唐融合通信技术无锡有限公司</footer>
+
+
+<!-- Mainly scripts -->
+<script src="js/jquery-1.9.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/colorpicker/js/colorpicker.js"></script>
+<script src="js/colorpicker/js/eye.js"></script>
+<script src="js/colorpicker/js/utils.js"></script>
+<script src="js/colorpicker/js/layout.js?ver=1.0.2"></script>
+
+<!--图表 框架-->
+<script type="text/javascript" src="js/angular.js"></script>
+<script type="text/javascript" src="js/echarts-all.js"></script>
+<script type="text/javascript" src="js/app.js"></script>
+<script type="text/javascript" src="js/clip/ZeroClipboard.js"></script>
+<script type="text/javascript" src="js/sweetalert/sweetalert.min.js"></script>
+<script type="text/javascript">
+        //主体高度自适应
+        mainHeight();
+        $(window).resize(function () {
+            mainHeight();
+        });
+        function mainHeight() {
+            var winHeight = $(window).height() - 147;
+            $(".echartDemo-container").height(winHeight);
+            $(".echartDemo-c").height(winHeight);
+            $("#echartDemo-chart").height(winHeight - 90);
+        }
+
+
+
+        //颜色
+        /*$('.colorSelector').each(function () {
+           var _this = $(this);
+           _this.ColorPicker({
+                color: '#ffffff',
+                onShow: function (colpkr) {
+                    $(colpkr).fadeIn(500);
+                    return false;
+                },
+                onHide: function (colpkr) {
+                    $(colpkr).fadeOut(500);
+                    return false;
+                },
+                onChange: function (hsb, hex, rgb) {
+                    _this.find("div").css('backgroundColor', '#' + hex);
+                    _this.find("input[type='hidden']").val('#' + hex);
+                }
+            });
+        });*/
+
+    //
+ $(function () {
+     var clip = null;
+     function getId(id) { return document.getElementById(id); }
+     function init() {
+         clip = new ZeroClipboard.Client();
+         clip.setHandCursor(true);
+         clip.addEventListener('mouseOver', function (client) {
+             // update the text on mouse over
+             clip.setText( getId('copyText').innerHTML );
+         });
+
+         clip.addEventListener('complete', function (client, text) {
+             //debugstr("Copied text to clipboard: " + text );
+             swal("复制成功!");
+         });
+
+         clip.glue('copyJson', 'copyJson_con' );
+
+         //console.log(clip);
+     }
+     init();
+ });
+
+
+</script>
+</body>
+</html>

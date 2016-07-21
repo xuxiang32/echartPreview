@@ -8,3 +8,5 @@ Graph generation system for on-line real-time preview of echarts,create by Angul
 初学AngularJS,练手项目，加上公司需要一个实时预览的功能，所以就诞生了这个小系统
 
 初学乍练，写的不好，请见谅。
+
+[在线DEMO](http://www.mxcst.com/ui/echartPreview/)  

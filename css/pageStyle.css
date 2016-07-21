@@ -1,0 +1,47 @@
+.echartDemo-header{padding: 0 20px; height:40px; background-color:#293849;}
+.echartDemo-header h1{ font-size:14px; color: #fff; line-height:40px;}
+.echartDemo-header span{ font-size:12px;line-height: 40px;color: #fff;}
+
+.echartDemo-main{width: 100%;}
+.echartDemo-title{font-size: 24px;color: #666; padding:20px;}
+
+.echartDemo-container{ border-top:solid 2px #DEE5E7; border-bottom:solid 2px #DEE5E7;width: 100%; margin: 0;}
+
+.echartDemo-footer{ height:25px; background-color:#DEE5E7;width: 100%;font-size: 12px; text-align: center; line-height:25px;color: #999;}
+
+.echartDemo-br{ border-right:solid 2px #DEE5E7;}
+
+.echartDemo-chart{height: auto;width: 100%;}
+
+.echartDemo-c{overflow: auto; background-color: #fff;}
+.echartDemo-r-title{font-size: 16px;color: #666;padding: 10px 0; border-bottom:solid 1px #DEE5E7;}
+
+.echartDemo-button{padding: 20px; text-align: center;}
+
+
+.echartTest-json{width: 100%; background: #f8f8f8;clear: both;}
+.echartTest-json pre{font-size: 14px; line-height:2; padding: 10px;word-break: break-all;
+    word-wrap: break-word;  white-space: pre-wrap; height: 200px;display: block;overflow-y: auto;}
+
+.echartTest-json2{width: 100%; background: #f8f8f8;clear: both;height: 180px; margin-top: 20px;}
+.echartTest-json2 textarea{width: 100%; background: #fff;clear: both;height: 150px;padding: 5px; border:solid 1px #eee; border-radius:3px;}
+.echartTest-json2 h1{font-size: 16px; color: #333;padding: 10px;}
+
+.copyJson_con{width: 120px;height: 34px;}
+
+.copyJson_con button{display: block;width: 120px;height: 34px;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
