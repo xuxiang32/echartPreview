@@ -21,19 +21,18 @@
 
 .echartTest-json{width: 100%; background: #f8f8f8;clear: both;}
 .echartTest-json pre{font-size: 14px; line-height:2; padding: 10px;word-break: break-all;
-    word-wrap: break-word;  white-space: pre-wrap; height: 200px;display: block;overflow-y: auto;}
+    word-wrap: break-word;  white-space: pre-wrap; height: 400px;display: block;overflow-y: auto;}
 
-.echartTest-json2{width: 100%; background: #f8f8f8;clear: both;height: 180px; margin-top: 20px;}
-.echartTest-json2 textarea{width: 100%; background: #fff;clear: both;height: 150px;padding: 5px; border:solid 1px #eee; border-radius:3px;}
-.echartTest-json2 h1{font-size: 16px; color: #333;padding: 10px;}
+.echartTest-json2{width: 100%; background: #f8f8f8;clear: both;height: 400px; }
+.echartTest-json2 textarea{width: 100%; background: #fff;clear: both;height: 400px;padding: 5px; border:solid 1px #ccc; border-radius:3px;}
+.echartTest-json2 h1{font-size: 16px; color: #333;padding:10px 20px 22px;}
 
 .copyJson_con{width: 120px;height: 34px;}
 
 .copyJson_con button{display: block;width: 120px;height: 34px;}
 
 
-
-
+.series-txa{width: 100%; background: #fff;clear: both;height:450px;padding: 5px; border:solid 1px #ccc; border-radius:3px; margin-top: 20px;overflow-y: auto;}
 
 
 

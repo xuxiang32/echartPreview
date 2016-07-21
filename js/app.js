@@ -6,43 +6,12 @@ var app =  angular.module('myApp',[]);
 
 app.controller('echartDemo',function ($scope) {
 
-    $scope.typeOption = {
-        type:'bar'
-    };
-    //默认图形样例
-    $scope.chartTypes = {
-        "line":{"name": "Some data", "data": [1, 2, 4, 7, 3],type: "line"},
-        "bar":{"name": "Some data", "data": [1, 2, 4, 7, 3],type: "bar"},
-        "pie":{
-            name: "My Super Column",
-            data:[
-                {value:2, name:'直接访问'},
-                {value:3, name:'邮件营销'},
-                {value:4, name:'联盟广告'},
-                {value:3, name:'视频广告'},
-                {value:2, name:'搜索引擎'}
-            ], type: "pie","radius":"40%","center":['75%', '30%']}
-    };
+    //Series配置
+    $scope.chartSeries = "";
 
-    //默认Series配置
-    $scope.chartSeries = [
-        {"name": "数据1", "data": [1, 2, 4, 7, 3],type: "bar"},
-        {"name": "数据2", "data": [3, 1, 2, 5, 2],type: "bar"},
-        {"name": "数据3", "data": [4, 2, 2, 3, 5], type: "bar"},
-        {"name": "数据4", "data": [5, 6, 3, 2, 1], type: "bar"}
-        /*{
-         name: "数据4",
-         data:[
-         {value:2, name:'直接访问'},
-         {value:3, name:'邮件营销'},
-         {value:4, name:'联盟广告'},
-         {value:3, name:'视频广告'},
-         {value:2, name:'搜索引擎'}
-         ], type: "pie","radius":"40%","center":['75%', '30%']}*/
-    ];
-
+    //图表配置参数初始化
     $scope.chartConfig = {};
-
+    //默认DEMO参数
     $scope.chartConfig ={
         title : {
             text: '大连经分图表生成系统测试版',
@@ -62,11 +31,27 @@ app.controller('echartDemo',function ($scope) {
         legend: {
             data:['数据1','数据2','数据3','数据4']
         },
-        series : $scope.chartSeries
+        series : [
+            {"name": "数据1", "data": [1, 2, 4, 7, 3],type: "bar"},
+            {"name": "数据2", "data": [3, 1, 2, 5, 2],type: "bar"},
+            {"name": "数据3", "data": [4, 2, 2, 3, 5], type: "bar"},
+            {"name": "数据4", "data": [5, 6, 3, 2, 1], type: "bar"}
+            /*{
+             name: "数据4",
+             data:[
+             {value:2, name:'直接访问'},
+             {value:3, name:'邮件营销'},
+             {value:4, name:'联盟广告'},
+             {value:3, name:'视频广告'},
+             {value:2, name:'搜索引擎'}
+             ], type: "pie","radius":"40%","center":['75%', '30%']}*/
+        ]
     };
 
+    //基础图形配置选项
     $scope.typeVal = "bar";
 
+    //改变图形选项
     $scope.typeChanged = function (obj,index) {
         //console.log(obj);
         if(obj == "bar"){
@@ -193,7 +178,7 @@ app.controller('echartDemo',function ($scope) {
         //myChart.setOption($scope.chartConfig);
     };
 
-
+    //粘贴JSON配置项
     $scope.chartConfigPaste = "";
 
     //获取图表对象
@@ -207,6 +192,8 @@ app.controller('echartDemo',function ($scope) {
 
     },true);
 
+
+    //监听粘贴JSON配置项
     $scope.$watch("chartConfigPaste",function (newValue, oldValue) {
         if(newValue){
             var options;
@@ -222,7 +209,20 @@ app.controller('echartDemo',function ($scope) {
         }
     },true);
 
-
+    $scope.$watch("chartSeries",function (newValue, oldValue) {
+        if(newValue){
+            var options;
+            try {
+                options = eval(newValue);
+                if(options){
+                    $scope.chartConfig.series = options;
+                    myChart.setOption($scope.chartConfig);
+                }
+            }catch (e) {
+                swal("Series格式错误，请仔细检查!");
+            }
+        }
+    },true);
 
 });
 

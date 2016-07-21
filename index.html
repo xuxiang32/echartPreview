@@ -50,6 +50,7 @@
                         <li class=""><a data-toggle="tab" href="#tab-3">图例</a></li>
                         <li class=""><a data-toggle="tab" href="#tab-4">提示框</a></li>
                         <li class=""><a data-toggle="tab" href="#tab-5">图表</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-6">Series</a></li>
                     </ul>
                     <form method="get" class="form-horizontal">
                         <div class="tab-content">
@@ -669,6 +670,9 @@
 
                                 </div>
                             </div>
+                            <div id="tab-6" class="tab-pane ">
+                                <textarea class="series-txa" ng-model="chartSeries"></textarea>
+                            </div>
                         </div>
 
                     </form>
@@ -686,34 +690,41 @@
                 <h4 class="modal-title">查看JSON</h4>
             </div>
             <div class="modal-body">
-                <div method="get" class="form-horizontal">
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">格式化JSON:</label>
-                        <div class="col-sm-4">
-                            <div class="checkbox checkbox-primary">
-                                <input id="prettyJson" type="checkbox"   ng-model="prettyJSON" >
-                                <label for="prettyJson">
-                                </label>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label fs16 fw400">格式化JSON:</label>
+                                <div class="col-sm-4">
+                                    <div class="checkbox checkbox-primary">
+                                        <input id="prettyJson" type="checkbox"   ng-model="prettyJSON" >
+                                        <label for="prettyJson">
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4" >
+                                    <div class="copyJson_con" id="copyJson_con">
+                                        <button type="button" class="btn btn-w-m btn-primary" id="copyJson">复制到剪切板</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-sm-4" >
-                            <div class="copyJson_con" id="copyJson_con">
-                                <button type="button" class="btn btn-w-m btn-primary" id="copyJson">复制到剪切板</button>
-                            </div>
+                        <div class="echartTest-json">
+                            <pre ng-show="prettyJSON" id="copyText">{{ chartConfig | json }}</pre>
+                            <pre ng-show="!prettyJSON">{{ chartConfig }}</pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="echartTest-json2">
+                            <h1>粘贴JSON：</h1>
+                            <textarea name="pasteJson" ng-model="chartConfigPaste"  id="" ></textarea>
                         </div>
                     </div>
                 </div>
-                <div class="echartTest-json">
-                    <pre ng-show="prettyJSON" id="copyText">{{ chartConfig | json }}</pre>
-                    <pre ng-show="!prettyJSON">{{ chartConfig }}</pre>
-                </div>
-                <div class="echartTest-json2">
-                    <h1>粘贴JSON：</h1>
-                    <textarea name="pasteJson" ng-model="chartConfigPaste"  id="" ></textarea>
-                </div>
+
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
             </div>
         </div>
     </div>
