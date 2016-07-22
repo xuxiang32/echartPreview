@@ -187,6 +187,7 @@ app.controller('echartDemo',function ($scope) {
     //监听图表配置
     $scope.$watch("chartConfig",function (newValue, oldValue) {
         // console.log(newValue);
+        myChart.hideLoading();
         myChart.clear();
         myChart.setOption(newValue);
 
@@ -201,6 +202,8 @@ app.controller('echartDemo',function ($scope) {
                 options = JSON.parse(newValue);
                 if(options){
                     $scope.chartConfig = options;
+                    myChart.hideLoading();
+                    myChart.clear();
                     myChart.setOption(options);
                 }
             }catch (e) {
@@ -216,6 +219,8 @@ app.controller('echartDemo',function ($scope) {
                 options = eval(newValue);
                 if(options){
                     $scope.chartConfig.series = options;
+                    myChart.hideLoading();
+                    myChart.clear();
                     myChart.setOption($scope.chartConfig);
                 }
             }catch (e) {
